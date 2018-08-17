@@ -1,10 +1,38 @@
 #![allow(dead_code, unused_variables)]
 
+#[macro_use]
+extern crate lazy_static;
+
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
+
+lazy_static! {
+    static ref CLASSES: Mutex<HashMap<String, Class>> = {
+        Mutex::new(HashMap::new())
+    };
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
 struct Slot {}
 
+#[derive(Clone, Debug, PartialEq, Eq)]
 struct Method {}
 
+#[derive(Clone, Debug)]
 struct Class {
+    inner: Arc<Mutex<InnerClass>>,
+}
+
+impl PartialEq for Class {
+    fn eq(&self, other: &Class) -> bool {
+        Arc::ptr_eq(&self.inner, &other.inner)
+    }
+}
+
+impl Eq for Class {}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct InnerClass {
     name: String,
     direct_superclasses: Vec<Class>,
     direct_slots: Vec<Slot>,
@@ -14,18 +42,21 @@ struct Class {
     direct_methods: Vec<Method>,
 }
 
-fn find_class(name: &str) -> Option<Class> {
-    None
+fn find_class(name: impl AsRef<str>) -> Option<Class> {
+    CLASSES.lock().unwrap().get(name.as_ref()).cloned()
 }
 
 fn ensure_class(name: String, superclasses: Vec<Class>, slots: Vec<Slot>) {
 
 }
 
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn it_works() {
-        assert_eq!(2 + 2, 4);
+        assert_eq!(None, find_class("hello"));
     }
 }
