@@ -18,3 +18,8 @@ macro_rules! defgeneric {
 macro_rules! defmethod {
     ($name:ident () {}) => {()}
 }
+
+pub fn init() {
+    class::init();
+    generic::init();
+}

@@ -11,6 +11,12 @@ lazy_static! {
     };
 }
 
+pub fn init() {
+    defclass!(standard_class () {
+
+    })
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Slot {}
 
