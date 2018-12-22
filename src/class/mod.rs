@@ -55,6 +55,14 @@ pub fn ensure_class(name: String, superclasses: Vec<Class>, slots: Vec<Slot>) {
 
 }
 
+pub fn canonicalize_direct_superclasses(superclasses: Vec<String>) -> Vec<Class>{
+    vec![]
+}
+
+pub fn canonicalize_direct_slots(slots: Vec<String>) -> Vec<Slot> {
+    vec![]
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
