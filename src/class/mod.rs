@@ -49,6 +49,11 @@ struct InnerClass {
     direct_methods: Vec<Method>,
 }
 
+pub fn insert_class(class: Class) {
+    let name = class.inner.read().unwrap().name.clone();
+    CLASSES.write().unwrap().insert(name, class);
+}
+
 pub fn find_class(name: impl AsRef<str>) -> Option<Class> {
     CLASSES.read().unwrap().get(name.as_ref()).cloned()
 }
@@ -60,8 +65,27 @@ pub fn find_class_err(name: impl AsRef<str>) -> Class {
     }
 }
 
-pub fn ensure_class(name: impl Into<String>, superclasses: Vec<Class>, slots: Vec<Slot>) {
-
+pub fn ensure_class(name: impl AsRef<str>, direct_superclasses: Vec<Class>, direct_slots: Vec<Slot>) {
+    if let None = find_class(&name) {
+        let name = name.as_ref().to_string();
+        // TODO: replace this:
+        let class_precedence_list = vec![];
+        let effective_slots = vec![];
+        let direct_subclasses = vec![];
+        let direct_methods = vec![];
+        let class = InnerClass { name, class_precedence_list,
+                                 direct_superclasses, direct_slots,
+                                 effective_slots,
+                                 direct_subclasses, direct_methods };
+        let inner = Arc::new(RwLock::new(class));
+        let class_obj = Class { inner };
+        // with this. eventually.
+        // let standard_class = find_class("StandardClass").unwrap();
+        // let class_obj = make_instance(standard_class);
+        insert_class(class_obj);
+    } else {
+        panic!("Can't redefine the class named {}.", name.as_ref());
+    }
 }
 
 pub fn canonicalize_direct_superclasses(superclasses: Vec<impl AsRef<str>>) -> Vec<Class>{
@@ -70,6 +94,10 @@ pub fn canonicalize_direct_superclasses(superclasses: Vec<impl AsRef<str>>) -> V
 
 pub fn canonicalize_direct_slots(slots: Vec<impl Into<String>>) -> Vec<Slot> {
     slots.into_iter().map(|name| Slot { name: name.into() }).collect()
+}
+
+pub fn make_instance(class: Class) {
+
 }
 
 #[cfg(test)]
