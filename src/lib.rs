@@ -6,8 +6,8 @@ use std::sync::{Arc, RwLock};
 use lazy_static::lazy_static;
 
 lazy_static! {
-    static ref CLASSES: Mutex<HashMap<String, Class>> = {
-        Mutex::new(HashMap::new())
+    static ref CLASSES: RwLock<HashMap<String, Class>> = {
+        RwLock::new(HashMap::new())
     };
 }
 
@@ -19,7 +19,7 @@ struct Method {}
 
 #[derive(Clone, Debug)]
 struct Class {
-    inner: Arc<Mutex<InnerClass>>,
+    inner: Arc<RwLock<InnerClass>>,
 }
 
 impl PartialEq for Class {
@@ -42,7 +42,7 @@ struct InnerClass {
 }
 
 fn find_class(name: impl AsRef<str>) -> Option<Class> {
-    CLASSES.lock().unwrap().get(name.as_ref()).cloned()
+    CLASSES.read().unwrap().get(name.as_ref()).cloned()
 }
 
 fn ensure_class(name: String, superclasses: Vec<Class>, slots: Vec<Slot>) {
