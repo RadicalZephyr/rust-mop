@@ -51,12 +51,19 @@ pub fn find_class(name: impl AsRef<str>) -> Option<Class> {
     CLASSES.read().unwrap().get(name.as_ref()).cloned()
 }
 
-pub fn ensure_class(name: String, superclasses: Vec<Class>, slots: Vec<Slot>) {
+pub fn find_class_err(name: impl AsRef<str>) -> Class {
+    match find_class(&name) {
+        Some(class) => class,
+        None => panic!("class '{}' has not been defined", name.as_ref()),
+    }
+}
+
+pub fn ensure_class(name: impl Into<String>, superclasses: Vec<Class>, slots: Vec<Slot>) {
 
 }
 
-pub fn canonicalize_direct_superclasses(superclasses: Vec<String>) -> Vec<Class>{
-    vec![]
+pub fn canonicalize_direct_superclasses(superclasses: Vec<impl AsRef<str>>) -> Vec<Class>{
+    superclasses.into_iter().map(find_class_err).collect()
 }
 
 pub fn canonicalize_direct_slots(slots: Vec<String>) -> Vec<Slot> {

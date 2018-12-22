@@ -10,10 +10,13 @@ macro_rules! defclass {
     ($name:ident ( $($direct_superclass_name:ident ),* ) {
         $( $direct_slot_name:ident );*
     }) => {
-        ensure_class(stringify!($name).to_string(),
-                     canonicalize_direct_superclasses(vec![$(stringify!($direct_superclass_name).to_string()),*]),
-                     canonicalize_direct_slots(vec![$(stringify!($direct_slot_name).to_string()),*])
-        );
+        {
+            let superclass_names: Vec<&'static str> = vec![$(stringify!($direct_superclass_name)),*];
+            let superclasses = canonicalize_direct_superclasses(superclass_names);
+            let slot_names: Vec<&'static str> = vec![$(stringify!($direct_slot_name).to_string()),*];
+            let slots = canonicalize_direct_slots(slot_names);
+            ensure_class(stringify!($name), superclasses, slots);
+        }
     }
 }
 
