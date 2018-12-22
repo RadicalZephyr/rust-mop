@@ -1,10 +1,9 @@
 #![allow(dead_code, unused_variables)]
 
-#[macro_use]
-extern crate lazy_static;
-
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, RwLock};
+
+use lazy_static::lazy_static;
 
 lazy_static! {
     static ref CLASSES: Mutex<HashMap<String, Class>> = {

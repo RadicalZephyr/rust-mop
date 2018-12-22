@@ -2,6 +2,7 @@
 name = "metaobject"
 version = "0.1.0"
 authors = ["Geoff Shannon <geoffpshannon@gmail.com>"]
+edition = "2018"
 
 [dependencies]
 lazy_static = "1.1"
