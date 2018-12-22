@@ -18,7 +18,9 @@ pub fn init() {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Slot {}
+pub struct Slot {
+    name: String,
+}
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Method {}
@@ -66,8 +68,8 @@ pub fn canonicalize_direct_superclasses(superclasses: Vec<impl AsRef<str>>) -> V
     superclasses.into_iter().map(find_class_err).collect()
 }
 
-pub fn canonicalize_direct_slots(slots: Vec<String>) -> Vec<Slot> {
-    vec![]
+pub fn canonicalize_direct_slots(slots: Vec<impl Into<String>>) -> Vec<Slot> {
+    slots.into_iter().map(|name| Slot { name: name.into() }).collect()
 }
 
 #[cfg(test)]
