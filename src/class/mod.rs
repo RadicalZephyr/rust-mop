@@ -3,8 +3,6 @@ use std::sync::{Arc, RwLock};
 
 use lazy_static::lazy_static;
 
-use super::defclass;
-
 lazy_static! {
     static ref CLASSES: RwLock<HashMap<String, Class>> = {
         RwLock::new(HashMap::new())
@@ -12,9 +10,7 @@ lazy_static! {
 }
 
 pub fn init() {
-    defclass!(standard_class () {
 
-    })
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -27,7 +23,7 @@ pub struct Method {}
 
 #[derive(Clone, Debug)]
 pub struct Class {
-    inner: Arc<RwLock<InnerClass>>,
+    inner: Arc<RwLock<StandardClass>>,
 }
 
 impl PartialEq for Class {
@@ -39,7 +35,7 @@ impl PartialEq for Class {
 impl Eq for Class {}
 
 #[derive(Clone, Debug, PartialEq, Eq)]
-struct InnerClass {
+struct StandardClass {
     name: String,
     direct_superclasses: Vec<Class>,
     direct_slots: Vec<Slot>,
@@ -73,10 +69,11 @@ pub fn ensure_class(name: impl AsRef<str>, direct_superclasses: Vec<Class>, dire
         let effective_slots = vec![];
         let direct_subclasses = vec![];
         let direct_methods = vec![];
-        let class = InnerClass { name, class_precedence_list,
-                                 direct_superclasses, direct_slots,
-                                 effective_slots,
-                                 direct_subclasses, direct_methods };
+        let class = StandardClass {
+            name, class_precedence_list, effective_slots,
+            direct_superclasses, direct_slots,
+            direct_subclasses, direct_methods
+        };
         let inner = Arc::new(RwLock::new(class));
         let class_obj = Class { inner };
         // with this. eventually.
