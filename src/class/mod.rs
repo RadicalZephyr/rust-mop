@@ -45,6 +45,21 @@ struct StandardClass {
     direct_methods: Vec<Method>,
 }
 
+impl StandardClass {
+    pub fn new(name: String, direct_superclasses: Vec<Class>, direct_slots: Vec<Slot>) -> StandardClass {
+        let class_precedence_list = vec![];
+        let effective_slots = vec![];
+        let direct_subclasses = vec![];
+        let direct_methods = vec![];
+
+        StandardClass {
+            name, class_precedence_list, effective_slots,
+            direct_superclasses, direct_slots,
+            direct_subclasses, direct_methods
+        }
+    }
+}
+
 pub fn insert_class(class: Class) {
     let name = class.inner.read().unwrap().name.clone();
     CLASSES.write().unwrap().insert(name, class);
@@ -61,19 +76,11 @@ pub fn find_class_err(name: impl AsRef<str>) -> Class {
     }
 }
 
-pub fn ensure_class(name: impl AsRef<str>, direct_superclasses: Vec<Class>, direct_slots: Vec<Slot>) {
+pub fn ensure_class(name: impl AsRef<str>, superclasses: Vec<Class>, slots: Vec<Slot>) {
     if let None = find_class(&name) {
         let name = name.as_ref().to_string();
         // TODO: replace this:
-        let class_precedence_list = vec![];
-        let effective_slots = vec![];
-        let direct_subclasses = vec![];
-        let direct_methods = vec![];
-        let class = StandardClass {
-            name, class_precedence_list, effective_slots,
-            direct_superclasses, direct_slots,
-            direct_subclasses, direct_methods
-        };
+        let class = StandardClass::new(name, superclasses, slots);
         let inner = Arc::new(RwLock::new(class));
         let class_obj = Class { inner };
         // with this. eventually.
