@@ -1,3 +1,4 @@
+use std::any::Any;
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 
@@ -58,6 +59,41 @@ impl StandardClass {
             direct_subclasses, direct_methods
         }
     }
+}
+
+#[derive(Debug)]
+struct StandardInstance {
+    class: Class,
+    slots: Vec<Box<dyn Any>>,
+}
+
+/// This is intended to be a general handle capable of holding either
+/// Rust primitive values or mop class instances. Composite primitive
+/// Rust types are automagically "lifted" into simple mop wrapper
+/// classes that just make them introspectable.
+#[derive(Debug)]
+enum Value {
+    Instance(StandardInstance),
+
+    U8(u8),
+    U16(u16),
+    U32(u32),
+    U64(u64),
+    U128(u128),
+    Usize(usize),
+
+    I8(i8),
+    I16(i16),
+    I32(i32),
+    I64(i64),
+    I128(i128),
+    Isize(isize),
+
+    F32(f32),
+    F64(f64),
+
+    Bool(bool),
+    Char(char),
 }
 
 pub fn insert_class(class: Class) {
