@@ -79,13 +79,10 @@ pub fn find_class_err(name: impl AsRef<str>) -> Class {
 pub fn ensure_class(name: impl AsRef<str>, superclasses: Vec<Class>, slots: Vec<Slot>) {
     if let None = find_class(&name) {
         let name = name.as_ref().to_string();
-        // TODO: replace this:
+        // This should eventually be conditional on whether the metaclass is StandardClass
         let class = StandardClass::new(name, superclasses, slots);
         let inner = Arc::new(RwLock::new(class));
         let class_obj = Class { inner };
-        // with this. eventually.
-        // let standard_class = find_class("StandardClass").unwrap();
-        // let class_obj = make_instance(standard_class);
         insert_class(class_obj);
     } else {
         panic!("Can't redefine the class named {}.", name.as_ref());
