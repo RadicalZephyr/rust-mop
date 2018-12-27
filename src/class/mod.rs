@@ -64,7 +64,7 @@ impl StandardClass {
 #[derive(Debug)]
 struct StandardInstance {
     class: Class,
-    slots: Vec<Box<dyn Any>>,
+    slots: Vec<Value>,
 }
 
 /// This is intended to be a general handle capable of holding either
@@ -74,6 +74,7 @@ struct StandardInstance {
 #[derive(Debug)]
 enum Value {
     Instance(StandardInstance),
+    Boxed(Box<dyn Any>),
 
     U8(u8),
     U16(u16),
