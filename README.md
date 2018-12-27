@@ -1,5 +1,8 @@
 # A Rusty MOP
 
+<img src="https://github.com/RadicalZephyr/rust-mop/raw/56f6de47ea5449e13e02775b836735c093fca066/assets/rusty_mop.jpg"
+     alt="Rusty Mop" align="right" />
+
 An experiment in creating a flexible dynamic object system with a
 clear metaobject protocol. Right now this is in an extremely
 early/experimental state. I'm attempting to translate the design and
